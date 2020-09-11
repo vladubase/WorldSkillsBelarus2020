@@ -1126,29 +1126,28 @@ __CLEAR_SRAM:
 	.ORG 0xE0
 
 	.CSEG
-;/*****************************************************
-;This program was produced by the
-;CodeWizardAVR V2.05.3 Standard
-;Automatic Program Generator
-;� Copyright 1998-2011 Pavel Haiduc, HP InfoTech s.r.l.
-;http://www.hpinfotech.com
+;/****
+;	*	@name		GRIPPER
+;	*	@file 		Gripper.c
+;	*
+;	*	@author 	Uladzislau 'vladubase' Dubatouka
+;	*				<vladubase@gmail.com>.
+;	*	@version	V1.0
+;	*	@date 		Created on 2020.09.09.
+;	*
+;	*	@brief 		This program is controlling the servo on gripper .
+;    *
+;    *   @note       Chip type               : ATtiny85
+;    *               AVR Core Clock frequency: 8,000000 MHz
+;    *               Memory model            : Small
+;    *               External RAM size       : 0
+;    *               Data Stack size         : 128
+;*****/
 ;
-;Project : Gripper
-;Version :
-;Date    : 09.09.2020
-;Author  : vladubase@gmail.com
-;Company :
-;Comments:
 ;
+;/************************************** Includes **************************************/
 ;
-;Chip type               : ATtiny85
-;AVR Core Clock frequency: 8,000000 MHz
-;Memory model            : Small
-;External RAM size       : 0
-;Data Stack size         : 128
-;*****************************************************/
-;
-;#include <tiny85.h>
+;#include    <tiny85.h>
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
 	.EQU __se_bit=0x20
@@ -1158,135 +1157,151 @@ __CLEAR_SRAM:
 	.EQU __sm_standby=0x18
 	.SET power_ctrl_reg=mcucr
 	#endif
-;#include <delay.h>
-;#include <stdint.h>
-;#include <stdbool.h>
+;#include    <delay.h>
+;#include    <stdint.h>
+;#include    <stdbool.h>
 ;
-;// Declare your global variables here
+;
+;/*************************************** Defines **************************************/
+;
+;#define     SIGNAL      PINB & (1 << DDB1)
+;
+;
+;/*********************************** Global Variables *********************************/
+;
+;#define     MIN_PWM     40
+;#define     MAX_PWM     167
+;
+;
+;/********************************* Function  prototypes *******************************/
+;
+;void InitSys (void);
+;
+;
+;/**************************************** Main ****************************************/
 ;
 ;void main (void) {
-; 0000 001E void main (void) {
+; 0000 002E void main (void) {
 
 	.CSEG
 _main:
-; 0000 001F     // Declare your local variables here
-; 0000 0020 
-; 0000 0021     // System Clock
-; 0000 0022     // Crystal Oscillator division factor: 32
-; 0000 0023         CLKPR=0x85;
+; 0000 002F     InitSys ();
+	RCALL _InitSys
+; 0000 0030 
+; 0000 0031     while (true) {
+_0x3:
+; 0000 0032         // Read data on SIGNAL port
+; 0000 0033         if (SIGNAL) {
+	SBIS 0x16,1
+	RJMP _0x6
+; 0000 0034             // Close gripper
+; 0000 0035         	OCR0A = MAX_PWM;
+	LDI  R30,LOW(167)
+	RJMP _0x9
+; 0000 0036         } else {
+_0x6:
+; 0000 0037             // Open gripper
+; 0000 0038         	OCR0A = MIN_PWM;
+	LDI  R30,LOW(40)
+_0x9:
+	OUT  0x29,R30
+; 0000 0039         }
+; 0000 003A     }
+	RJMP _0x3
+; 0000 003B }
+_0x8:
+	RJMP _0x8
+;
+;
+;/************************************* Functions **************************************/
+;
+;void InitSys (void) {
+; 0000 0040 void InitSys (void) {
+_InitSys:
+; 0000 0041     // Declare your local variables here
+; 0000 0042 
+; 0000 0043     // System Clock
+; 0000 0044     // Crystal Oscillator division factor: 32
+; 0000 0045         CLKPR=0x85;
 	LDI  R30,LOW(133)
 	OUT  0x26,R30
-; 0000 0024 
-; 0000 0025     // Input/Output Ports initialization
-; 0000 0026     // Port B initialization
-; 0000 0027     // Func5=In Func4=In Func3=In Func2=In Func1=In Func0=Out
-; 0000 0028     // State5=T State4=T State3=T State2=T State1=T State0=0
-; 0000 0029         PORTB=0x00;
+; 0000 0046 
+; 0000 0047     // Input/Output Ports initialization
+; 0000 0048     // Port B initialization
+; 0000 0049     // Func5=In Func4=In Func3=In Func2=In Func1=In Func0=Out
+; 0000 004A     // State5=T State4=T State3=T State2=T State1=T State0=0
+; 0000 004B         PORTB=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x18,R30
-; 0000 002A         DDRB=0x01;
+; 0000 004C         DDRB=0x01;
 	LDI  R30,LOW(1)
 	OUT  0x17,R30
-; 0000 002B 
-; 0000 002C     // Timer/Counter 0 initialization
-; 0000 002D     // Clock source: System Clock
-; 0000 002E     // Clock value: (System Clock / 256)
-; 0000 002F     // Mode: Fast PWM top=0xFF
-; 0000 0030     // OC0A output: Non-Inverted PWM
-; 0000 0031     // OC0B output: Disconnected
-; 0000 0032         TCCR0A=0x83;
+; 0000 004D 
+; 0000 004E     // Timer/Counter 0 initialization
+; 0000 004F     // Clock source: System Clock
+; 0000 0050     // Clock value: (System Clock / 256)
+; 0000 0051     // Mode: Fast PWM top=0xFF
+; 0000 0052     // OC0A output: Non-Inverted PWM
+; 0000 0053     // OC0B output: Disconnected
+; 0000 0054         TCCR0A=0x83;
 	LDI  R30,LOW(131)
 	OUT  0x2A,R30
-; 0000 0033         TCCR0B=0x04;
+; 0000 0055         TCCR0B=0x04;
 	LDI  R30,LOW(4)
 	OUT  0x33,R30
-; 0000 0034         TCNT0=0x00;
+; 0000 0056         TCNT0=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x32,R30
-; 0000 0035         OCR0A=0x00;
+; 0000 0057         OCR0A=0x00;
 	OUT  0x29,R30
-; 0000 0036         OCR0B=0x00;
+; 0000 0058         OCR0B=0x00;
 	OUT  0x28,R30
-; 0000 0037 
-; 0000 0038     // Timer/Counter 1 initialization
-; 0000 0039     // Clock source: System Clock
-; 0000 003A     // Clock value: Timer1 Stopped
-; 0000 003B     // Mode: Normal top=0xFF
-; 0000 003C     // OC1A output: Disconnected
-; 0000 003D     // OC1B output: Disconnected
-; 0000 003E     // Timer1 Overflow Interrupt: Off
-; 0000 003F     // Compare A Match Interrupt: Off
-; 0000 0040     // Compare B Match Interrupt: Off
-; 0000 0041         PLLCSR=0x00;
-	OUT  0x27,R30
-; 0000 0042 
-; 0000 0043         TCCR1=0x00;
-	OUT  0x30,R30
-; 0000 0044         GTCCR=0x00;
-	OUT  0x2C,R30
-; 0000 0045         TCNT1=0x00;
-	OUT  0x2F,R30
-; 0000 0046         OCR1A=0x00;
-	OUT  0x2E,R30
-; 0000 0047         OCR1B=0x00;
-	OUT  0x2B,R30
-; 0000 0048         OCR1C=0x00;
-	OUT  0x2D,R30
-; 0000 0049 
-; 0000 004A     // External Interrupt(s) initialization
-; 0000 004B     // INT0: Off
-; 0000 004C     // Interrupt on any change on pins PCINT0-5: Off
-; 0000 004D         GIMSK=0x00;
-	OUT  0x3B,R30
-; 0000 004E         MCUCR=0x00;
-	OUT  0x35,R30
-; 0000 004F 
-; 0000 0050     // Timer(s)/Counter(s) Interrupt(s) initialization
-; 0000 0051     	TIMSK=0x00;
-	OUT  0x39,R30
-; 0000 0052 
-; 0000 0053     // Universal Serial Interface initialization
-; 0000 0054     // Mode: Disabled
-; 0000 0055     // Clock source: Register & Counter=no clk.
-; 0000 0056     // USI Counter Overflow Interrupt: Off
-; 0000 0057         USICR=0x00;
-	OUT  0xD,R30
-; 0000 0058 
-; 0000 0059     // Analog Comparator initialization
-; 0000 005A     // Analog Comparator: Off
-; 0000 005B         ACSR=0x80;
-	LDI  R30,LOW(128)
-	OUT  0x8,R30
-; 0000 005C         ADCSRB=0x00;
-	LDI  R30,LOW(0)
-	OUT  0x3,R30
-; 0000 005D         DIDR0=0x00;
-	OUT  0x14,R30
-; 0000 005E 
-; 0000 005F     // ADC initialization
-; 0000 0060     // ADC disabled
-; 0000 0061         ADCSRA=0x00;
-	OUT  0x6,R30
-; 0000 0062 
-; 0000 0063 	// DDRB |= (1 << DDB1);
-; 0000 0064     // PORTB |= (1 << 1);
-; 0000 0065 
-; 0000 0066     while (true) {
-_0x3:
-; 0000 0067 //    	uint8_t i = 0;
-; 0000 0068 //    	for (i = 30; i < 166; i++) {
-; 0000 0069 //         	OCR0A = i;
-; 0000 006A //        	delay_ms (30);
-; 0000 006B //        }
-; 0000 006C     	OCR0A = 30;
-	LDI  R30,LOW(30)
-	OUT  0x29,R30
-; 0000 006D     }
-	RJMP _0x3
-; 0000 006E }
-_0x6:
-	RJMP _0x6
-;
+; 0000 0059 	/*
+; 0000 005A     // Timer/Counter 1 initialization
+; 0000 005B     // Clock source: System Clock
+; 0000 005C     // Clock value: Timer1 Stopped
+; 0000 005D     // Mode: Normal top=0xFF
+; 0000 005E     // OC1A output: Disconnected
+; 0000 005F     // OC1B output: Disconnected
+; 0000 0060     // Timer1 Overflow Interrupt: Off
+; 0000 0061     // Compare A Match Interrupt: Off
+; 0000 0062     // Compare B Match Interrupt: Off
+; 0000 0063         PLLCSR=0x00;
+; 0000 0064 
+; 0000 0065         TCCR1=0x00;
+; 0000 0066         GTCCR=0x00;
+; 0000 0067         TCNT1=0x00;
+; 0000 0068         OCR1A=0x00;
+; 0000 0069         OCR1B=0x00;
+; 0000 006A         OCR1C=0x00;
+; 0000 006B 
+; 0000 006C     // External Interrupt(s) initialization
+; 0000 006D     // INT0: Off
+; 0000 006E     // Interrupt on any change on pins PCINT0-5: Off
+; 0000 006F         GIMSK=0x00;
+; 0000 0070         MCUCR=0x00;
+; 0000 0071 
+; 0000 0072     // Timer(s)/Counter(s) Interrupt(s) initialization
+; 0000 0073     	TIMSK=0x00;
+; 0000 0074 
+; 0000 0075     // Universal Serial Interface initialization
+; 0000 0076     // Mode: Disabled
+; 0000 0077     // Clock source: Register & Counter=no clk.
+; 0000 0078     // USI Counter Overflow Interrupt: Off
+; 0000 0079         USICR=0x00;
+; 0000 007A 
+; 0000 007B     // Analog Comparator initialization
+; 0000 007C     // Analog Comparator: Off
+; 0000 007D         ACSR=0x80;
+; 0000 007E         ADCSRB=0x00;
+; 0000 007F         DIDR0=0x00;
+; 0000 0080 
+; 0000 0081     // ADC initialization
+; 0000 0082     // ADC disabled
+; 0000 0083         ADCSRA=0x00;
+; 0000 0084 	*/
+; 0000 0085 }
+	RET
 
 	.CSEG
 

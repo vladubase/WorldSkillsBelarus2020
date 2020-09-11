@@ -1,6 +1,10 @@
-VERSION:3 SOURCE_TIMESTAMP:512A92E2
-NODE:I LEVEL:0 LINE:23 "C:\Program Files (x86)\CodeVisionAVR\inc\tiny85.h"
-NODE:I LEVEL:0 LINE:24 "C:\Program Files (x86)\CodeVisionAVR\inc\delay.h"
-NODE:I LEVEL:0 LINE:25 "C:\Program Files (x86)\CodeVisionAVR\inc\stdint.h"
-NODE:I LEVEL:0 LINE:26 "C:\Program Files (x86)\CodeVisionAVR\inc\stdbool.h"
-NODE:F LEVEL:0 LINE:30 "main(void)"
+VERSION:3 SOURCE_TIMESTAMP:512B73EB
+NODE:I LEVEL:0 LINE:22 "C:\Program Files (x86)\CodeVisionAVR\inc\tiny85.h"
+NODE:I LEVEL:0 LINE:23 "C:\Program Files (x86)\CodeVisionAVR\inc\delay.h"
+NODE:I LEVEL:0 LINE:24 "C:\Program Files (x86)\CodeVisionAVR\inc\stdint.h"
+NODE:I LEVEL:0 LINE:25 "C:\Program Files (x86)\CodeVisionAVR\inc\stdbool.h"
+NODE:M LEVEL:0 LINE:30 "SIGNAL"
+NODE:M LEVEL:0 LINE:35 "MIN_PWM"
+NODE:M LEVEL:0 LINE:36 "MAX_PWM"
+NODE:F LEVEL:0 LINE:46 "main(void)"
+NODE:F LEVEL:0 LINE:64 "InitSys(void)"

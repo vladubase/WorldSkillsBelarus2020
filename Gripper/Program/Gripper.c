@@ -1,33 +1,67 @@
-/*****************************************************
-This program was produced by the
-CodeWizardAVR V2.05.3 Standard
-Automatic Program Generator
-� Copyright 1998-2011 Pavel Haiduc, HP InfoTech s.r.l.
-http://www.hpinfotech.com
+/****
+	*	@name		GRIPPER
+	*	@file 		Gripper.c
+	*
+	*	@author 	Uladzislau 'vladubase' Dubatouka
+	*				<vladubase@gmail.com>.
+	*	@version	V1.0
+	*	@date 		Created on 2020.09.09.
+	*
+	*	@brief 		This program is controlling the servo on gripper .
+    *
+    *   @note       Chip type               : ATtiny85
+    *               AVR Core Clock frequency: 8,000000 MHz
+    *               Memory model            : Small
+    *               External RAM size       : 0
+    *               Data Stack size         : 128     
+*****/
 
-Project : Gripper 
-Version : 
-Date    : 09.09.2020
-Author  : vladubase@gmail.com
-Company : 
-Comments: 
+
+/************************************** Includes **************************************/
+
+#include    <tiny85.h>
+#include    <delay.h>
+#include    <stdint.h>
+#include    <stdbool.h>
 
 
-Chip type               : ATtiny85
-AVR Core Clock frequency: 8,000000 MHz
-Memory model            : Small
-External RAM size       : 0
-Data Stack size         : 128
-*****************************************************/
+/*************************************** Defines **************************************/
 
-#include <tiny85.h>
-#include <delay.h>
-#include <stdint.h>
-#include <stdbool.h>
+#define     SIGNAL      PINB & (1 << DDB1)
 
-// Declare your global variables here
 
-void main (void) {
+/*********************************** Global Variables *********************************/
+
+#define     MIN_PWM     40
+#define     MAX_PWM     167   
+
+
+/********************************* Function  prototypes *******************************/
+
+void InitSys (void);
+
+
+/**************************************** Main ****************************************/
+
+void main (void) { 
+    InitSys ();
+
+    while (true) {
+        // Read data on SIGNAL port
+        if (SIGNAL) {
+            // Close gripper
+        	OCR0A = MAX_PWM;
+        } else {
+            // Open gripper
+        	OCR0A = MIN_PWM;
+        }		
+    }
+}
+
+
+/************************************* Functions **************************************/
+
+void InitSys (void) {
     // Declare your local variables here
     
     // System Clock
@@ -52,7 +86,7 @@ void main (void) {
         TCNT0=0x00;
         OCR0A=0x00;
         OCR0B=0x00;
-
+	/*
     // Timer/Counter 1 initialization
     // Clock source: System Clock
     // Clock value: Timer1 Stopped
@@ -94,18 +128,6 @@ void main (void) {
 
     // ADC initialization
     // ADC disabled
-        ADCSRA=0x00;
-
-	// DDRB |= (1 << DDB1);
-    // PORTB |= (1 << 1);
-                 
-    while (true) {
-//    	uint8_t i = 0;
-//    	for (i = 30; i < 166; i++) {
-//         	OCR0A = i;
-//        	delay_ms (30);
-//        }
-    	OCR0A = 30;			
-    }
+        ADCSRA=0x00;  
+	*/      
 }
- 
