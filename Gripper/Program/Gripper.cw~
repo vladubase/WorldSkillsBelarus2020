@@ -1,8 +1,8 @@
 [CodeWizard]
 Toolset=AVR
 [Chip]
-Type=ATtiny85
-CPUClock=8
+Type=ATmega328P
+CPUClock=12
 XTALDivEnabled=0
 XTALDivValue=2
 XTALDivIndex=0
@@ -28,7 +28,7 @@ InterruptEnabled=0
 [Ports]
 DDR0=0
 PORT0=0
-DDR1=1
+DDR1=8
 PORT1=0
 DDR2=0
 PORT2=0
@@ -80,9 +80,9 @@ INT7Mode=0
 PCMSK=0
 [Timer0]
 T0ClkSource=0
-T0Prescaler=1
-T0Mode=3
-T0Output=1
+T0Prescaler=0
+T0Mode=0
+T0Output=0
 T0OutputB=0
 T0OverflowInt=0
 T0CaptureInt=0
@@ -107,6 +107,7 @@ T1InpCapture1=0
 T1Interrupt0=0
 T1Interrupt1=0
 T1Interrupt2=0
+T1Interrupt3=0
 T1Value=0
 T1InpCaptureReg=0
 T1CompareA=0
@@ -118,9 +119,9 @@ T1DeadTimeLow=-1
 T3InpCaptureReg=0
 [Timer2]
 T2ClkSource=0
-T2Prescaler=0
-T2Mode=0
-T2Output=0
+T2Prescaler=1
+T2Mode=3
+T2Output=1
 T2OutputB=0
 T2OverflowInt=0
 T2CompareInt=0
@@ -281,7 +282,7 @@ ADCInterrupt=0
 ADCNoiseCancel=0
 ADCVref=0
 ADCVrefType=0
-ADCClock=2
+ADCClock=3
 ADCAutoScan=0
 FirstInput=0
 LastInput=0
