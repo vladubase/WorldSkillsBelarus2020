@@ -22,7 +22,7 @@ Active0=0
 EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
-TimeStamp1=1361800989
+TimeStamp1=1361802219
 PageIndex1=1
 TimeStamp0=1361677998
 [Compiler]
@@ -118,7 +118,7 @@ WarningExternalDeclaredNeverDefined=1
 WarningUnknownPragma=1
 DebugBootLoader=0
 WatchAVR8LAutoVariables=0
-Build=167
+Build=168
 UseEEPROMLocation0=1
 [Assembler]
 OutputFormat=1
@@ -203,16 +203,16 @@ Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1361801596
+TimeStamp=1361864881
 [BookmarksFoldedCode]
 Files=1
 F1=Gripper.c
 [Bookmarks1]
-TimeStamp=1361800989
-Row=100
-Column=34
+TimeStamp=1361802219
+Row=50
+Column=19
 ScrollPosX=0
-ScrollPosY=85
+ScrollPosY=39
 BK0=-1
 BK1=-1
 BK2=-1
@@ -223,8 +223,6 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode1]
-Blocks=0
 [HeadersList]
 Files=1
 F1=C:\Users\vladu\OneDrive\Documents\!Projects\WorldSkillsBelarus2020\Gripper\Program\Gripper.c
@@ -235,3 +233,6 @@ F2=C:\Program Files (x86)\CodeVisionAVR\inc\tiny85_bits.h
 F3=C:\Program Files (x86)\CodeVisionAVR\inc\delay.h
 F4=C:\Program Files (x86)\CodeVisionAVR\inc\stdint.h
 F5=C:\Program Files (x86)\CodeVisionAVR\inc\stdbool.h
+[FoldedCode1]
+Line1=89
+Blocks=1
