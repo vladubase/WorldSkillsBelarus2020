@@ -1206,9 +1206,15 @@ _0x6:
 _0x9:
 	OUT  0x29,R30
 ; 0000 0039         }
-; 0000 003A     }
+; 0000 003A 
+; 0000 003B         // Delay to minimize the influence of noise.
+; 0000 003C         delay_ms (1500);
+	LDI  R26,LOW(1500)
+	LDI  R27,HIGH(1500)
+	RCALL _delay_ms
+; 0000 003D     }
 	RJMP _0x3
-; 0000 003B }
+; 0000 003E }
 _0x8:
 	RJMP _0x8
 ;
@@ -1216,95 +1222,106 @@ _0x8:
 ;/************************************* Functions **************************************/
 ;
 ;void InitSys (void) {
-; 0000 0040 void InitSys (void) {
+; 0000 0043 void InitSys (void) {
 _InitSys:
-; 0000 0041     // Declare your local variables here
-; 0000 0042 
-; 0000 0043     // System Clock
-; 0000 0044     // Crystal Oscillator division factor: 32
-; 0000 0045         CLKPR=0x85;
+; 0000 0044     // Declare your local variables here
+; 0000 0045 
+; 0000 0046     // System Clock
+; 0000 0047     // Crystal Oscillator division factor: 32
+; 0000 0048         CLKPR=0x85;
 	LDI  R30,LOW(133)
 	OUT  0x26,R30
-; 0000 0046 
-; 0000 0047     // Input/Output Ports initialization
-; 0000 0048     // Port B initialization
-; 0000 0049     // Func5=In Func4=In Func3=In Func2=In Func1=In Func0=Out
-; 0000 004A     // State5=T State4=T State3=T State2=T State1=T State0=0
-; 0000 004B         PORTB=0x00;
+; 0000 0049 
+; 0000 004A     // Input/Output Ports initialization
+; 0000 004B     // Port B initialization
+; 0000 004C     // Func5=In Func4=In Func3=In Func2=In Func1=In Func0=Out
+; 0000 004D     // State5=T State4=T State3=T State2=T State1=T State0=0
+; 0000 004E         PORTB=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x18,R30
-; 0000 004C         DDRB=0x01;
+; 0000 004F         DDRB=0x01;
 	LDI  R30,LOW(1)
 	OUT  0x17,R30
-; 0000 004D 
-; 0000 004E     // Timer/Counter 0 initialization
-; 0000 004F     // Clock source: System Clock
-; 0000 0050     // Clock value: (System Clock / 256)
-; 0000 0051     // Mode: Fast PWM top=0xFF
-; 0000 0052     // OC0A output: Non-Inverted PWM
-; 0000 0053     // OC0B output: Disconnected
-; 0000 0054         TCCR0A=0x83;
+; 0000 0050 
+; 0000 0051     // Timer/Counter 0 initialization
+; 0000 0052     // Clock source: System Clock
+; 0000 0053     // Clock value: (System Clock / 256)
+; 0000 0054     // Mode: Fast PWM top=0xFF
+; 0000 0055     // OC0A output: Non-Inverted PWM
+; 0000 0056     // OC0B output: Disconnected
+; 0000 0057         TCCR0A=0x83;
 	LDI  R30,LOW(131)
 	OUT  0x2A,R30
-; 0000 0055         TCCR0B=0x04;
+; 0000 0058         TCCR0B=0x04;
 	LDI  R30,LOW(4)
 	OUT  0x33,R30
-; 0000 0056         TCNT0=0x00;
+; 0000 0059         TCNT0=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x32,R30
-; 0000 0057         OCR0A=0x00;
+; 0000 005A         OCR0A=0x00;
 	OUT  0x29,R30
-; 0000 0058         OCR0B=0x00;
+; 0000 005B         OCR0B=0x00;
 	OUT  0x28,R30
-; 0000 0059 	/*
-; 0000 005A     // Timer/Counter 1 initialization
-; 0000 005B     // Clock source: System Clock
-; 0000 005C     // Clock value: Timer1 Stopped
-; 0000 005D     // Mode: Normal top=0xFF
-; 0000 005E     // OC1A output: Disconnected
-; 0000 005F     // OC1B output: Disconnected
-; 0000 0060     // Timer1 Overflow Interrupt: Off
-; 0000 0061     // Compare A Match Interrupt: Off
-; 0000 0062     // Compare B Match Interrupt: Off
-; 0000 0063         PLLCSR=0x00;
-; 0000 0064 
-; 0000 0065         TCCR1=0x00;
-; 0000 0066         GTCCR=0x00;
-; 0000 0067         TCNT1=0x00;
-; 0000 0068         OCR1A=0x00;
-; 0000 0069         OCR1B=0x00;
-; 0000 006A         OCR1C=0x00;
-; 0000 006B 
-; 0000 006C     // External Interrupt(s) initialization
-; 0000 006D     // INT0: Off
-; 0000 006E     // Interrupt on any change on pins PCINT0-5: Off
-; 0000 006F         GIMSK=0x00;
-; 0000 0070         MCUCR=0x00;
-; 0000 0071 
-; 0000 0072     // Timer(s)/Counter(s) Interrupt(s) initialization
-; 0000 0073     	TIMSK=0x00;
+; 0000 005C 	/*
+; 0000 005D     // Timer/Counter 1 initialization
+; 0000 005E     // Clock source: System Clock
+; 0000 005F     // Clock value: Timer1 Stopped
+; 0000 0060     // Mode: Normal top=0xFF
+; 0000 0061     // OC1A output: Disconnected
+; 0000 0062     // OC1B output: Disconnected
+; 0000 0063     // Timer1 Overflow Interrupt: Off
+; 0000 0064     // Compare A Match Interrupt: Off
+; 0000 0065     // Compare B Match Interrupt: Off
+; 0000 0066         PLLCSR=0x00;
+; 0000 0067 
+; 0000 0068         TCCR1=0x00;
+; 0000 0069         GTCCR=0x00;
+; 0000 006A         TCNT1=0x00;
+; 0000 006B         OCR1A=0x00;
+; 0000 006C         OCR1B=0x00;
+; 0000 006D         OCR1C=0x00;
+; 0000 006E 
+; 0000 006F     // External Interrupt(s) initialization
+; 0000 0070     // INT0: Off
+; 0000 0071     // Interrupt on any change on pins PCINT0-5: Off
+; 0000 0072         GIMSK=0x00;
+; 0000 0073         MCUCR=0x00;
 ; 0000 0074 
-; 0000 0075     // Universal Serial Interface initialization
-; 0000 0076     // Mode: Disabled
-; 0000 0077     // Clock source: Register & Counter=no clk.
-; 0000 0078     // USI Counter Overflow Interrupt: Off
-; 0000 0079         USICR=0x00;
-; 0000 007A 
-; 0000 007B     // Analog Comparator initialization
-; 0000 007C     // Analog Comparator: Off
-; 0000 007D         ACSR=0x80;
-; 0000 007E         ADCSRB=0x00;
-; 0000 007F         DIDR0=0x00;
-; 0000 0080 
-; 0000 0081     // ADC initialization
-; 0000 0082     // ADC disabled
-; 0000 0083         ADCSRA=0x00;
-; 0000 0084 	*/
-; 0000 0085 }
+; 0000 0075     // Timer(s)/Counter(s) Interrupt(s) initialization
+; 0000 0076     	TIMSK=0x00;
+; 0000 0077 
+; 0000 0078     // Universal Serial Interface initialization
+; 0000 0079     // Mode: Disabled
+; 0000 007A     // Clock source: Register & Counter=no clk.
+; 0000 007B     // USI Counter Overflow Interrupt: Off
+; 0000 007C         USICR=0x00;
+; 0000 007D 
+; 0000 007E     // Analog Comparator initialization
+; 0000 007F     // Analog Comparator: Off
+; 0000 0080         ACSR=0x80;
+; 0000 0081         ADCSRB=0x00;
+; 0000 0082         DIDR0=0x00;
+; 0000 0083 
+; 0000 0084     // ADC initialization
+; 0000 0085     // ADC disabled
+; 0000 0086         ADCSRA=0x00;
+; 0000 0087 	*/
+; 0000 0088 }
 	RET
 
 	.CSEG
 
 	.CSEG
+_delay_ms:
+	adiw r26,0
+	breq __delay_ms1
+__delay_ms0:
+	__DELAY_USW 0x7D0
+	wdr
+	sbiw r26,1
+	brne __delay_ms0
+__delay_ms1:
+	ret
+
 ;END OF CODE MARKER
 __END_OF_CODE:

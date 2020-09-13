@@ -54,7 +54,10 @@ void main (void) {
         } else {
             // Open gripper
         	OCR0A = MIN_PWM;
-        }		
+        } 
+        
+        // Delay to minimize the influence of noise.
+        delay_ms (1500);		
     }
 }
 

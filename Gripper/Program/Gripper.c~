@@ -48,13 +48,16 @@ void main (void) {
 
     while (true) {
         // Read data on SIGNAL port
-        if SIGNAL {
+        if (SIGNAL) {
             // Close gripper
         	OCR0A = MAX_PWM;
         } else {
             // Open gripper
         	OCR0A = MIN_PWM;
-        }		
+        } 
+        
+        // Delay to minimize the influence of noise
+        delay_ms (1500);		
     }
 }
 
