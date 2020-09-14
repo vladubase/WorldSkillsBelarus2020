@@ -13,7 +13,7 @@
     *               AVR Core Clock frequency: 8,000000 MHz
     *               Memory model            : Small
     *               External RAM size       : 0
-    *               Data Stack size         : 128     
+    *               Data Stack size         : 128
 *****/
 
 
@@ -89,48 +89,4 @@ void InitSys (void) {
         TCNT0=0x00;
         OCR0A=0x00;
         OCR0B=0x00;
-	/*
-    // Timer/Counter 1 initialization
-    // Clock source: System Clock
-    // Clock value: Timer1 Stopped
-    // Mode: Normal top=0xFF
-    // OC1A output: Disconnected
-    // OC1B output: Disconnected
-    // Timer1 Overflow Interrupt: Off
-    // Compare A Match Interrupt: Off
-    // Compare B Match Interrupt: Off
-        PLLCSR=0x00;
-
-        TCCR1=0x00;
-        GTCCR=0x00;
-        TCNT1=0x00;
-        OCR1A=0x00;
-        OCR1B=0x00;
-        OCR1C=0x00;
-
-    // External Interrupt(s) initialization
-    // INT0: Off
-    // Interrupt on any change on pins PCINT0-5: Off
-        GIMSK=0x00;
-        MCUCR=0x00;
-	
-    // Timer(s)/Counter(s) Interrupt(s) initialization
-    	TIMSK=0x00;
-
-    // Universal Serial Interface initialization
-    // Mode: Disabled
-    // Clock source: Register & Counter=no clk.
-    // USI Counter Overflow Interrupt: Off
-        USICR=0x00;
-
-    // Analog Comparator initialization
-    // Analog Comparator: Off
-        ACSR=0x80;
-        ADCSRB=0x00;
-        DIDR0=0x00;
-
-    // ADC initialization
-    // ADC disabled
-        ADCSRA=0x00;  
-	*/      
 }
