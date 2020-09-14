@@ -1135,7 +1135,7 @@ __CLEAR_SRAM:
 ;	*	@version	V1.0
 ;	*	@date 		Created on 2020.09.09.
 ;	*
-;	*	@brief 		This program is controlling the servo on gripper .
+;	*	@brief 		This program is controlling the servo on gripper.
 ;    *
 ;    *   @note       Chip type               : ATtiny85
 ;    *               AVR Core Clock frequency: 8,000000 MHz
@@ -1169,8 +1169,8 @@ __CLEAR_SRAM:
 ;
 ;/*********************************** Global Variables *********************************/
 ;
-;#define     MIN_PWM     40
-;#define     MAX_PWM     167
+;#define     MIN_PWM     60
+;#define     MAX_PWM     165
 ;
 ;
 ;/********************************* Function  prototypes *******************************/
@@ -1196,21 +1196,21 @@ _0x3:
 	RJMP _0x6
 ; 0000 0034             // Close gripper
 ; 0000 0035         	OCR0A = MAX_PWM;
-	LDI  R30,LOW(167)
+	LDI  R30,LOW(165)
 	RJMP _0x9
 ; 0000 0036         } else {
 _0x6:
 ; 0000 0037             // Open gripper
 ; 0000 0038         	OCR0A = MIN_PWM;
-	LDI  R30,LOW(40)
+	LDI  R30,LOW(60)
 _0x9:
 	OUT  0x29,R30
 ; 0000 0039         }
 ; 0000 003A 
 ; 0000 003B         // Delay to minimize the influence of noise.
-; 0000 003C         delay_ms (1500);
-	LDI  R26,LOW(1500)
-	LDI  R27,HIGH(1500)
+; 0000 003C         delay_ms (500);
+	LDI  R26,LOW(500)
+	LDI  R27,HIGH(500)
 	RCALL _delay_ms
 ; 0000 003D     }
 	RJMP _0x3

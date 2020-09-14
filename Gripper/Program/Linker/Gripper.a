@@ -7,7 +7,7 @@
 ;	*	@version	V1.0
 ;	*	@date 		Created on 2020.09.09.
 ;	*
-;	*	@brief 		This program is controlling the servo on gripper .
+;	*	@brief 		This program is controlling the servo on gripper.
 ;    *
 ;    *   @note       Chip type               : ATtiny85
 ;    *               AVR Core Clock frequency: 8,000000 MHz
@@ -52,8 +52,8 @@
 ;
 ;/*********************************** Global Variables *********************************/
 ;
-;#define     MIN_PWM     40
-;#define     MAX_PWM     167
+;#define     MIN_PWM     60
+;#define     MAX_PWM     165
 ;
 ;
 ;/********************************* Function  prototypes *******************************/
@@ -93,7 +93,7 @@
 ;PCODE: $00000017 VOL: 0
 ; 0000 003A 
 ; 0000 003B         // Delay to minimize the influence of noise.
-; 0000 003C         delay_ms (1500);
+; 0000 003C         delay_ms (500);
 ;PCODE: $00000018 VOL: 0
 ;PCODE: $00000019 VOL: 0
 ; 0000 003D     }
