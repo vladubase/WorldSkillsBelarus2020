@@ -1169,7 +1169,7 @@ __CLEAR_SRAM:
 ;
 ;/*********************************** Global Variables *********************************/
 ;
-;#define     MIN_PWM     60
+;#define     MIN_PWM     65
 ;#define     MAX_PWM     165
 ;
 ;
@@ -1195,118 +1195,93 @@ _0x3:
 	SBIS 0x16,1
 	RJMP _0x6
 ; 0000 0034             // Close gripper
-; 0000 0035         	OCR0A = MAX_PWM;
+; 0000 0035             if (OCR0A > MAX_PWM) {
+	IN   R30,0x29
+	CPI  R30,LOW(0xA6)
+	BRLO _0x7
+; 0000 0036             	OCR0A = MAX_PWM;
 	LDI  R30,LOW(165)
-	RJMP _0x9
-; 0000 0036         } else {
-_0x6:
-; 0000 0037             // Open gripper
-; 0000 0038         	OCR0A = MIN_PWM;
-	LDI  R30,LOW(60)
-_0x9:
 	OUT  0x29,R30
-; 0000 0039         }
-; 0000 003A 
-; 0000 003B         // Delay to minimize the influence of noise.
-; 0000 003C         delay_ms (500);
+; 0000 0037             } else {
+	RJMP _0x8
+_0x7:
+; 0000 0038             	OCR0A++;
+	IN   R30,0x29
+	SUBI R30,-LOW(1)
+	OUT  0x29,R30
+	SUBI R30,LOW(1)
+; 0000 0039             	delay_ms (2);
+	LDI  R26,LOW(2)
+	LDI  R27,0
+	RCALL _delay_ms
+; 0000 003A            	}
+_0x8:
+; 0000 003B         } else {
+	RJMP _0x9
+_0x6:
+; 0000 003C             // Open gripper
+; 0000 003D             OCR0A = MIN_PWM;
+	LDI  R30,LOW(65)
+	OUT  0x29,R30
+; 0000 003E         }
+_0x9:
+; 0000 003F 
+; 0000 0040         // Delay to minimize the influence of noise.
+; 0000 0041         delay_ms (500);
 	LDI  R26,LOW(500)
 	LDI  R27,HIGH(500)
 	RCALL _delay_ms
-; 0000 003D     }
+; 0000 0042     }
 	RJMP _0x3
-; 0000 003E }
-_0x8:
-	RJMP _0x8
+; 0000 0043 }
+_0xA:
+	RJMP _0xA
 ;
 ;
 ;/************************************* Functions **************************************/
 ;
 ;void InitSys (void) {
-; 0000 0043 void InitSys (void) {
+; 0000 0048 void InitSys (void) {
 _InitSys:
-; 0000 0044     // Declare your local variables here
-; 0000 0045 
-; 0000 0046     // System Clock
-; 0000 0047     // Crystal Oscillator division factor: 32
-; 0000 0048         CLKPR=0x85;
+; 0000 0049     // Declare your local variables here
+; 0000 004A 
+; 0000 004B     // System Clock
+; 0000 004C     // Crystal Oscillator division factor: 32
+; 0000 004D         CLKPR=0x85;
 	LDI  R30,LOW(133)
 	OUT  0x26,R30
-; 0000 0049 
-; 0000 004A     // Input/Output Ports initialization
-; 0000 004B     // Port B initialization
-; 0000 004C     // Func5=In Func4=In Func3=In Func2=In Func1=In Func0=Out
-; 0000 004D     // State5=T State4=T State3=T State2=T State1=T State0=0
-; 0000 004E         PORTB=0x00;
+; 0000 004E 
+; 0000 004F     // Input/Output Ports initialization
+; 0000 0050     // Port B initialization
+; 0000 0051     // Func5=In Func4=In Func3=In Func2=In Func1=In Func0=Out
+; 0000 0052     // State5=T State4=T State3=T State2=T State1=T State0=0
+; 0000 0053         PORTB=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x18,R30
-; 0000 004F         DDRB=0x01;
+; 0000 0054         DDRB=0x01;
 	LDI  R30,LOW(1)
 	OUT  0x17,R30
-; 0000 0050 
-; 0000 0051     // Timer/Counter 0 initialization
-; 0000 0052     // Clock source: System Clock
-; 0000 0053     // Clock value: (System Clock / 256)
-; 0000 0054     // Mode: Fast PWM top=0xFF
-; 0000 0055     // OC0A output: Non-Inverted PWM
-; 0000 0056     // OC0B output: Disconnected
-; 0000 0057         TCCR0A=0x83;
+; 0000 0055 
+; 0000 0056     // Timer/Counter 0 initialization
+; 0000 0057     // Clock source: System Clock
+; 0000 0058     // Clock value: (System Clock / 256)
+; 0000 0059     // Mode: Fast PWM top=0xFF
+; 0000 005A     // OC0A output: Non-Inverted PWM
+; 0000 005B     // OC0B output: Disconnected
+; 0000 005C         TCCR0A=0x83;
 	LDI  R30,LOW(131)
 	OUT  0x2A,R30
-; 0000 0058         TCCR0B=0x04;
+; 0000 005D         TCCR0B=0x04;
 	LDI  R30,LOW(4)
 	OUT  0x33,R30
-; 0000 0059         TCNT0=0x00;
+; 0000 005E         TCNT0=0x00;
 	LDI  R30,LOW(0)
 	OUT  0x32,R30
-; 0000 005A         OCR0A=0x00;
+; 0000 005F         OCR0A=0x00;
 	OUT  0x29,R30
-; 0000 005B         OCR0B=0x00;
+; 0000 0060         OCR0B=0x00;
 	OUT  0x28,R30
-; 0000 005C 	/*
-; 0000 005D     // Timer/Counter 1 initialization
-; 0000 005E     // Clock source: System Clock
-; 0000 005F     // Clock value: Timer1 Stopped
-; 0000 0060     // Mode: Normal top=0xFF
-; 0000 0061     // OC1A output: Disconnected
-; 0000 0062     // OC1B output: Disconnected
-; 0000 0063     // Timer1 Overflow Interrupt: Off
-; 0000 0064     // Compare A Match Interrupt: Off
-; 0000 0065     // Compare B Match Interrupt: Off
-; 0000 0066         PLLCSR=0x00;
-; 0000 0067 
-; 0000 0068         TCCR1=0x00;
-; 0000 0069         GTCCR=0x00;
-; 0000 006A         TCNT1=0x00;
-; 0000 006B         OCR1A=0x00;
-; 0000 006C         OCR1B=0x00;
-; 0000 006D         OCR1C=0x00;
-; 0000 006E 
-; 0000 006F     // External Interrupt(s) initialization
-; 0000 0070     // INT0: Off
-; 0000 0071     // Interrupt on any change on pins PCINT0-5: Off
-; 0000 0072         GIMSK=0x00;
-; 0000 0073         MCUCR=0x00;
-; 0000 0074 
-; 0000 0075     // Timer(s)/Counter(s) Interrupt(s) initialization
-; 0000 0076     	TIMSK=0x00;
-; 0000 0077 
-; 0000 0078     // Universal Serial Interface initialization
-; 0000 0079     // Mode: Disabled
-; 0000 007A     // Clock source: Register & Counter=no clk.
-; 0000 007B     // USI Counter Overflow Interrupt: Off
-; 0000 007C         USICR=0x00;
-; 0000 007D 
-; 0000 007E     // Analog Comparator initialization
-; 0000 007F     // Analog Comparator: Off
-; 0000 0080         ACSR=0x80;
-; 0000 0081         ADCSRB=0x00;
-; 0000 0082         DIDR0=0x00;
-; 0000 0083 
-; 0000 0084     // ADC initialization
-; 0000 0085     // ADC disabled
-; 0000 0086         ADCSRA=0x00;
-; 0000 0087 	*/
-; 0000 0088 }
+; 0000 0061 }
 	RET
 
 	.CSEG

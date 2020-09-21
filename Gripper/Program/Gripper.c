@@ -4,7 +4,7 @@
 	*
 	*	@author 	Uladzislau 'vladubase' Dubatouka
 	*				<vladubase@gmail.com>.
-	*	@version	V1.0
+	*	@version	V1.1
 	*	@date 		Created on 2020.09.09.
 	*
 	*	@brief 		This program is controlling the servo on gripper.
@@ -32,7 +32,7 @@
 
 /*********************************** Global Variables *********************************/
 
-#define     MIN_PWM     60
+#define     MIN_PWM     65
 #define     MAX_PWM     165   
 
 
@@ -50,10 +50,15 @@ void main (void) {
         // Read data on SIGNAL port
         if (SIGNAL) {
             // Close gripper
-        	OCR0A = MAX_PWM;
+            if (OCR0A > MAX_PWM) {
+            	OCR0A = MAX_PWM;
+            } else {
+            	OCR0A++;
+            	delay_ms (2);
+           	}
         } else {
             // Open gripper
-        	OCR0A = MIN_PWM;
+            OCR0A = MIN_PWM;
         }
         
         // Delay to minimize the influence of noise.
